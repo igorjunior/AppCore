@@ -17,141 +17,145 @@
 #include <Ultralight/Listener.h>
 #include <Ultralight/Bitmap.h>
 
-namespace ultralight {
+namespace ultralight
+{
 
-class Monitor;
-class OverlayManager;
-class Surface;
-
-///
-/// Interface for all Window-related events. @see Window::set_listener
-///
-class WindowListener {
-public:
-  virtual ~WindowListener() {}
+  class Monitor;
+  class OverlayManager;
+  class Surface;
 
   ///
-  /// Called when the Window is closed.
+  /// Interface for all Window-related events. @see Window::set_listener
   ///
-  virtual void OnClose() = 0;
+  class WindowListener
+  {
+  public:
+    virtual ~WindowListener() {}
+
+    ///
+    /// Called when the Window is closed.
+    ///
+    virtual void OnClose() = 0;
+
+    ///
+    /// Called when the Window is resized.
+    ///
+    /// @param  width   The new width (in pixels).
+    ///
+    /// @param  height  The new height (in pixels).
+    ///
+    virtual void OnResize(uint32_t width, uint32_t height) = 0;
+  };
 
   ///
-  /// Called when the Window is resized.
+  /// Window creation flags. @see Window::Create
   ///
-  /// @param  width   The new width (in pixels).
-  ///
-  /// @param  height  The new height (in pixels).
-  ///
-  virtual void OnResize(uint32_t width, uint32_t height) = 0;
-};
-
-///
-/// Window creation flags. @see Window::Create
-///
-enum WindowFlags : uint8_t {
-  kWindowFlags_Borderless  = 1 << 0,
-  kWindowFlags_Titled      = 1 << 1,
-  kWindowFlags_Resizable   = 1 << 2,
-  kWindowFlags_Maximizable = 1 << 3,
-};
-
-///
-/// Window class, represents a platform window.
-///
-class AExport Window : public RefCounted {
-public:
-  ///
-  /// Create a new Window.
-  ///
-  /// @param  monitor       The monitor to create the Window on.
-  ///
-  /// @param  width         The width (in device coordinates).
-  ///
-  /// @param  height        The height (in device coordinates).
-  ///
-  /// @param  fullscreen    Whether or not the window is fullscreen.
-  ///
-  /// @param  window_flags  Various window flags.
-  ///
-  static Ref<Window> Create(Monitor* monitor, uint32_t width, uint32_t height,
-    bool fullscreen, unsigned int window_flags);
+  enum WindowFlags : uint8_t
+  {
+    kWindowFlags_Borderless = 1 << 0,
+    kWindowFlags_Titled = 1 << 1,
+    kWindowFlags_Resizable = 1 << 2,
+    kWindowFlags_Maximizable = 1 << 3,
+  };
 
   ///
-  /// Set a WindowListener to receive callbacks for window-related events.
+  /// Window class, represents a platform window.
   ///
-  /// @note  Ownership remains with the caller.
-  ///
-  virtual void set_listener(WindowListener* listener) = 0;
+  class AExport Window : public RefCounted
+  {
+  public:
+    ///
+    /// Create a new Window.
+    ///
+    /// @param  monitor       The monitor to create the Window on.
+    ///
+    /// @param  width         The width (in device coordinates).
+    ///
+    /// @param  height        The height (in device coordinates).
+    ///
+    /// @param  fullscreen    Whether or not the window is fullscreen.
+    ///
+    /// @param  window_flags  Various window flags.
+    ///
+    static Ref<Window> Create(Monitor *monitor, const char *name, uint32_t width, uint32_t height,
+                              bool fullscreen, unsigned int window_flags);
 
-  ///
-  /// Get the WindowListener, if any.
-  ///
-  virtual WindowListener* listener() = 0;
+    ///
+    /// Set a WindowListener to receive callbacks for window-related events.
+    ///
+    /// @note  Ownership remains with the caller.
+    ///
+    virtual void set_listener(WindowListener *listener) = 0;
 
-  ///
-  /// Get the window width (in pixels).
-  ///
-  virtual uint32_t width() const = 0;
+    ///
+    /// Get the WindowListener, if any.
+    ///
+    virtual WindowListener *listener() = 0;
 
-  ///
-  /// Get the window height (in pixels).
-  ///
-  virtual uint32_t height() const = 0;
+    ///
+    /// Get the window width (in pixels).
+    ///
+    virtual uint32_t width() const = 0;
 
-  ///
-  /// Whether or not the window is fullscreen.
-  ///
-  virtual bool is_fullscreen() const = 0;
+    ///
+    /// Get the window height (in pixels).
+    ///
+    virtual uint32_t height() const = 0;
 
-  ///
-  /// The DPI scale of the window.
-  ///
-  virtual double scale() const = 0;
+    ///
+    /// Whether or not the window is fullscreen.
+    ///
+    virtual bool is_fullscreen() const = 0;
 
-  ///
-  /// Set the window title.
-  ///
-  virtual void SetTitle(const char* title) = 0;
+    ///
+    /// The DPI scale of the window.
+    ///
+    virtual double scale() const = 0;
 
-  ///
-  /// Set the cursor.
-  ///
-  virtual void SetCursor(ultralight::Cursor cursor) = 0;
+    ///
+    /// Set the window title.
+    ///
+    virtual void SetTitle(const char *title) = 0;
 
-  ///
-  /// Close the window.
-  ///
-  virtual void Close() = 0;
+    ///
+    /// Set the cursor.
+    ///
+    virtual void SetCursor(ultralight::Cursor cursor) = 0;
 
-  ///
-  /// Convert device coordinates to pixels using the current DPI scale.
-  ///
-  virtual int DeviceToPixels(int val) const = 0;
+    ///
+    /// Close the window.
+    ///
+    virtual void Close() = 0;
 
-  ///
-  /// Convert pixels to device coordinates using the current DPI scale.
-  ///
-  virtual int PixelsToDevice(int val) const = 0;
+    ///
+    /// Convert device coordinates to pixels using the current DPI scale.
+    ///
+    virtual int DeviceToPixels(int val) const = 0;
 
-  ///
-  /// Draw a surface directly to window, used only by CPU renderer
-  ///
-  virtual void DrawSurface(int x, int y, Surface* surface) {}
+    ///
+    /// Convert pixels to device coordinates using the current DPI scale.
+    ///
+    virtual int PixelsToDevice(int val) const = 0;
 
-  ///
-  /// Get the underlying native window handle.
-  ///
-  /// @note This is:  - HWND on Windows
-  ///                 - NSWindow* on macOS
-  ///                 - GLFWwindow* on Linux
-  ///
-  virtual void* native_handle() const = 0;
+    ///
+    /// Draw a surface directly to window, used only by CPU renderer
+    ///
+    virtual void DrawSurface(int x, int y, Surface *surface) {}
 
-protected:
-  virtual ~Window();
-  virtual OverlayManager* overlay_manager() const = 0;
+    ///
+    /// Get the underlying native window handle.
+    ///
+    /// @note This is:  - HWND on Windows
+    ///                 - NSWindow* on macOS
+    ///                 - GLFWwindow* on Linux
+    ///
+    virtual void *native_handle() const = 0;
 
-  friend class OverlayImpl;
-};
+  protected:
+    virtual ~Window();
+    virtual OverlayManager *overlay_manager() const = 0;
 
-}  // namespace ultralight
+    friend class OverlayImpl;
+  };
+
+} // namespace ultralight
