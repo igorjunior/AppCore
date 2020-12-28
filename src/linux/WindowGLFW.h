@@ -30,6 +30,9 @@ namespace ultralight
 
     virtual void SetTitle(const char *title) override;
 
+    virtual void SetMinSize(int width, int height) override;
+    virtual void SetMaxSize(int width, int height) override;
+
     virtual void SetCursor(ultralight::Cursor cursor) override;
 
     virtual void Close() override;

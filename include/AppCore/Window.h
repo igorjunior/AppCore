@@ -117,6 +117,8 @@ namespace ultralight
     ///
     virtual void SetTitle(const char *title) = 0;
 
+    virtual void SetMinSize(int width, int height) = 0;
+    virtual void SetMaxSize(int width, int height) = 0;
     ///
     /// Set the cursor.
     ///

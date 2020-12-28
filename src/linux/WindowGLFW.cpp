@@ -206,6 +206,16 @@ namespace ultralight
     glfwSetWindowTitle(window_, title);
   }
 
+  void WindowGLFW::SetMinSize(int width, int height)
+  {
+    glfwSetWindowSizeLimits(window_, width, height, GLFW_DONT_CARE, GLFW_DONT_CARE);
+  }
+
+  void WindowGLFW::SetMaxSize(int width, int height)
+  {
+    glfwSetWindowSizeLimits(window_, GLFW_DONT_CARE, GLFW_DONT_CARE, width, height);
+  }
+
   void WindowGLFW::SetCursor(ultralight::Cursor cursor)
   {
     switch (cursor)
