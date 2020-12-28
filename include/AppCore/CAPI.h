@@ -266,6 +266,8 @@ extern "C"
   ///
   ACExport void ulWindowSetTitle(ULWindow window, const char *title);
 
+  ACExport void ulSetWindowMaxSize(ULWindow window, int width, int height);
+  ACExport void ulSetWindowMinSize(ULWindow window, int width, int height);
   ///
   /// Set the cursor for a window.
   ///

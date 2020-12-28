@@ -252,6 +252,15 @@ void ulWindowSetTitle(ULWindow window, const char *title)
   window->val->SetTitle(title);
 }
 
+void ulSetWindowMaxSize(ULWindow window, int width, int height)
+{
+  window->val->SetMaxSize(width, height);
+}
+
+void ulSetWindowMinSize(ULWindow window, int width, int height)
+{
+  window->val->SetMinSize(width, height);
+}
 void ulWindowSetCursor(ULWindow window, ULCursor cursor)
 {
   window->val->SetCursor((Cursor)cursor);
